@@ -3,6 +3,7 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
+import excepciones.ProductoNoEncontradoException;
 import productos.Bebida;
 import productos.Comida;
 import productos.Producto;
@@ -34,6 +35,17 @@ public class ProductoService {
         contadorID++;
         productos.add(p);
         return p;
+    }
+     public List<Producto> listarTodos() {
+        return productos;
+    }
+    public Producto obtenerPorId(int id) {
+        for (Producto p : productos) {
+            if (p.getId() == id) {
+                return p;
+            }
+        }
+        throw new ProductoNoEncontradoException("No se encontró un producto con id " + id);
     }
 
 }

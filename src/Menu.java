@@ -1,6 +1,9 @@
+import java.util.List;
 import java.util.Scanner;
 
+import excepciones.ProductoNoEncontradoException;
 import productos.Comida;
+import productos.Producto;
 import productos.Bebida;
 import service.ProductoService;
 import util.Validador;
@@ -32,10 +35,11 @@ public class Menu {
                     agregarProducto();
                     break;
                 case 2:
-                    System.out.println("Listar productos");
+                    listarProductos();
                     break;
                 case 3:
-                    System.out.println("Buscar/Actualizar producto");
+                    buscarProducto();
+                    System.out.println("Actualizar producto");
                     break;
                 case 4:
                     System.out.println("Eliminar producto");
@@ -54,8 +58,10 @@ public class Menu {
                 default:
                     System.out.println("Opción no válida");
             }
+        } catch (ProductoNoEncontradoException e) {
+            System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("Ocurrió un error inesperado: " + e.getMessage());
         }
 
     }
@@ -101,14 +107,14 @@ public class Menu {
             if (categoria.equalsIgnoreCase("comida")) {
                 double gramos = Validador.leerDouble(sc, "Ingrese los gramos: ");
                 Comida comida = new Comida(nombre, precio, stock, categoria, gramos);
-                service.cargarProducto(comida); // Se guarda como Producto
-                System.out.println("Comida agregada con éxito.");
+                Producto guardado = service.cargarProducto(comida); // Se guarda como Producto
+                System.out.println("Comida " + guardado.getId() + " agregada con éxito.");
 
             } else if (categoria.equalsIgnoreCase("bebida")) {
                 double ml = Validador.leerDouble(sc, "Ingrese los ml: ");
                 Bebida bebida = new Bebida(nombre, precio, stock, categoria, ml);
-                service.cargarProducto(bebida); // Se guarda como Producto
-                System.out.println("Bebida agregada con éxito.");
+                Producto guardado = service.cargarProducto(bebida); // Se guarda como Producto
+                System.out.println("Bebida " + guardado.getId() + " agregada con éxito.");
 
             } else {
                 System.out.println("Categoría no válida.");
@@ -118,4 +124,23 @@ public class Menu {
         }
     }
 
+    public void listarProductos() {
+        System.out.println("--- Lista de productos ---");
+        List<Producto> lista = service.listarTodos();
+        if (lista.isEmpty()) {
+            System.out.println("No hay productos disponibles.");
+        } else {
+            for (Producto p : lista) {
+                System.out.println(p);
+            }
+        }
+    }
+
+    public void buscarProducto() {
+        System.out.println("--- Buscar producto por ID ---");
+        int id = Validador.leerEntero(sc, "Ingrese el ID del producto: ");
+        Producto producto = service.obtenerPorId(id);
+        System.out.println("Producto encontrado: " + producto);
+
+    }
 }
