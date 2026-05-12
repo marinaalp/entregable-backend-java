@@ -1,10 +1,19 @@
 import java.util.Scanner;
 
+import productos.Comida;
+import productos.Bebida;
+import service.ProductoService;
+import util.Validador;
+
 public class Menu {
     private final Scanner sc;
-    Menu(Scanner scanner) {
+    private final ProductoService service;
+
+    Menu(Scanner scanner, ProductoService service) {
         this.sc = scanner;
+        this.service = service;
     }
+
     public void mostrarMenu() {
         System.out.println("Menú de opciones:");
         System.out.println("1) Agregar producto");
@@ -15,41 +24,43 @@ public class Menu {
         System.out.println("6) Listar pedidos");
         System.out.println("7) Salir");
     }
+
     public void seleccionarOpcion(int opcion) {
         try {
-             switch (opcion) {
-            case 1:
-                System.out.println("Agregar producto");
-                break;  
-            case 2:
-                System.out.println("Listar productos");
-                break;
-            case 3:
-                System.out.println("Buscar/Actualizar producto");
-                break;
-            case 4:
-                System.out.println("Eliminar producto");
-                break;
-            case 5:
-                System.out.println("Crear un pedido");
-                break;
-            case 6:
-                System.out.println("Listar pedidos");
-                break;
-            case 7:
-                System.out.println("Gracias por usar el sistema. ¡Hasta luego!");
-                System.out.println("Salir");
-                imagenSalida();
-                break;
-            default:
-                System.out.println("Opción no válida");
-        }
+            switch (opcion) {
+                case 1:
+                    agregarProducto();
+                    break;
+                case 2:
+                    System.out.println("Listar productos");
+                    break;
+                case 3:
+                    System.out.println("Buscar/Actualizar producto");
+                    break;
+                case 4:
+                    System.out.println("Eliminar producto");
+                    break;
+                case 5:
+                    System.out.println("Crear un pedido");
+                    break;
+                case 6:
+                    System.out.println("Listar pedidos");
+                    break;
+                case 7:
+                    System.out.println("Gracias por usar el sistema. ¡Hasta luego!");
+                    System.out.println("Salir");
+                    imagenSalida();
+                    break;
+                default:
+                    System.out.println("Opción no válida");
+            }
         } catch (Exception e) {
             // TODO: handle exception
         }
-       
+
     }
-    public void imagenSalida(){
+
+    public void imagenSalida() {
         // Bolsa de Papas
         System.out.println("      .----------------.      ");
         System.out.println("     /  _  _  _  _  _   \\     ");
@@ -78,4 +89,33 @@ public class Menu {
         System.out.println("     |____________|       ");
         System.out.println("     (____________)       ");
     }
+
+    public void agregarProducto() {
+        System.out.println("--- Datos del nuevo producto ---");
+        String nombre = Validador.leerTexto(sc, "Ingrese el nombre: ");
+        double precio = Validador.leerDouble(sc, "Ingrese el precio: ");
+        int stock = Validador.leerEntero(sc, "Ingrese el stock: ");
+        String categoria = Validador.leerTexto(sc, "Ingrese la categoría (comida o bebida): ");
+
+        try {
+            if (categoria.equalsIgnoreCase("comida")) {
+                double gramos = Validador.leerDouble(sc, "Ingrese los gramos: ");
+                Comida comida = new Comida(nombre, precio, stock, categoria, gramos);
+                service.cargarProducto(comida); // Se guarda como Producto
+                System.out.println("Comida agregada con éxito.");
+
+            } else if (categoria.equalsIgnoreCase("bebida")) {
+                double ml = Validador.leerDouble(sc, "Ingrese los ml: ");
+                Bebida bebida = new Bebida(nombre, precio, stock, categoria, ml);
+                service.cargarProducto(bebida); // Se guarda como Producto
+                System.out.println("Bebida agregada con éxito.");
+
+            } else {
+                System.out.println("Categoría no válida.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error de validación: " + e.getMessage());
+        }
     }
+
+}

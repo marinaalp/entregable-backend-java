@@ -2,26 +2,34 @@ import java.util.Scanner;
 
 import productos.Bebida;
 import productos.Comida;
-import productos.Producto;
 import service.ProductoService;
 import util.Validador;
 
 public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        Menu menu = new Menu(scanner);
         ProductoService service = new ProductoService();
+        Menu menu = new Menu(scanner, service);
+
         System.out.println("Bienvenido al sistema de gestión de productos y pedidos");
-        // menu.mostrarMenu();
         int opcion = 0;
         cargarDatosIniciales(service);
-
+        boolean mostrarMenu = true;
+        
         while (opcion != 7) {
-            menu.mostrarMenu();
+            if (mostrarMenu) {
+                menu.mostrarMenu();
+            }
+
             System.out.println("Seleccione una opción:");
             opcion = Validador.leerEntero(scanner, "Ingrese el número de la opción: ");
-            //opcion = scanner.nextInt();
             menu.seleccionarOpcion(opcion);
+            if (opcion != 7) {
+            String respuesta = Validador.leerTexto(scanner, "¿Desea volver a ver el menú de opciones? (s/n): ");
+            
+            // Si responde 's', mostrarMenu será true; de lo contrario, false
+            mostrarMenu = respuesta.equalsIgnoreCase("s");
+        }
         }
     }
 
