@@ -1,4 +1,10 @@
+import java.util.Scanner;
+
 public class Menu {
+    private final Scanner sc;
+    Menu(Scanner scanner) {
+        this.sc = scanner;
+    }
     public void mostrarMenu() {
         System.out.println("Menú de opciones:");
         System.out.println("1) Agregar producto");
@@ -10,7 +16,8 @@ public class Menu {
         System.out.println("7) Salir");
     }
     public void seleccionarOpcion(int opcion) {
-        switch (opcion) {
+        try {
+             switch (opcion) {
             case 1:
                 System.out.println("Agregar producto");
                 break;  
@@ -37,9 +44,13 @@ public class Menu {
             default:
                 System.out.println("Opción no válida");
         }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+       
     }
     public void imagenSalida(){
-        // Bolsa de Papas (estilo paquete de snacks)
+        // Bolsa de Papas
         System.out.println("      .----------------.      ");
         System.out.println("     /  _  _  _  _  _   \\     ");
         System.out.println("    |  (_)(_)(_)(_)(_)   |    ");
@@ -51,9 +62,9 @@ public class Menu {
         System.out.println("     \\__________________/     ");
         System.out.println("      '----------------'      ");
 
-        System.out.println(); // Separador
+        System.out.println();
 
-        // Gaseosa (Vaso grande con detalles)
+        // Gaseosa
         System.out.println("          ______          ");
         System.out.println("         |  ____|         ");
         System.out.println("         | |              ");
