@@ -40,7 +40,11 @@ public class Validador {
             } catch (InputMismatchException e) {
                 System.out.println(" Debe ingresar un número entero. Intente nuevamente.");
                 sc.nextLine(); // descarta lo que el usuario escribió mal
-            }
+            } catch (Exception e) {
+                 System.out.println(" Ocurrió un error inesperado: " + e.getMessage());
+                 sc.nextLine(); // descarta lo que el usuario escribió mal
+             }
+             
         }
     }
 
